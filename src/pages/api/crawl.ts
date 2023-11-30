@@ -6,6 +6,7 @@ import { SupabaseVectorStore } from "langchain/vectorstores/supabase";
 import { supabaseAdminClient } from "utils/supabaseAdmin";
 import { TokenTextSplitter } from "langchain/text_splitter";
 import { summarizeLongDocument } from "./summarizer";
+import cheerio from "cheerio";
 
 // The TextEncoder instance enc is created and its encode() method is called on the input string.
 // The resulting Uint8Array is then sliced, and the TextDecoder instance decodes the sliced array in a single line of code.
@@ -29,6 +30,19 @@ export default async function handler(
 
   const documentCollection = await Promise.all(
     pages.map(async (row) => {
+
+      const $ = cheerio.load(row.text); // Load the HTML content using Cheerio
+
+      // Remove script and style tags
+      $("script, style").remove();
+
+      // Get the text content after removing unwanted elements
+      const rawText = $.text();
+
+      // Log the raw text data
+      console.log(rawText);
+
+
       const splitter = new TokenTextSplitter({
         encodingName: "gpt2",
         chunkSize: 300,
