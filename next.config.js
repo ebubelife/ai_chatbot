@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   publicRuntimeConfig: {
-    apiUrl: process.env.API_URL || "http://localhost:3000",
+    apiUrl: process.env.API_URL || "https://atsh-chat.vercel.app/",
   },
 };
 
